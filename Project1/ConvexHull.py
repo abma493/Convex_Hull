@@ -31,11 +31,12 @@ class ConvexHull:
         self.convexHull(pointsA)
         self.convexHull(pointsB)
 
-        self.computeHull()
+        #self.computeHull()
 
 
-    def computeHull():
-        print()
+    # o(n)
+    def computeHull(self, arrayA, arrayB):
+        print(arrayA, arrayB)
 
     def pointIsAboveLine(line, point):
         yLine = float(Line.getSlope(line) * Point.getX(point) + Line.getY_Intercept(line))
