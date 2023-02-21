@@ -24,7 +24,7 @@ while line:
 
 input.close()
 
-# Create the array of Point Objects
+# Create the array of Point objects
 assert len(x) == len(y)
 points = []
 for i in range(len(x)):
