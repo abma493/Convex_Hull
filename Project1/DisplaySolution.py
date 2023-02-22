@@ -2,11 +2,13 @@ import matplotlib.pyplot as plt
 import os
 from Point import Point
 
+#Input file path
 inputFile = 'Project1/input.csv'
+#Open input .csv file
 if not os.path.exists(inputFile):
 	print('Cannot find '+ inputFile + '.')
 	quit()
-	
+
 input = open(inputFile,'r')
 
 x = []
