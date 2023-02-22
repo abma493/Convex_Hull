@@ -19,10 +19,12 @@ class ConvexHull:
         pointsB = []
 
         leftHalfSz = len(points) / 2
+
         for i in range(leftHalfSz):
             pointsA.append(points[i])
         
         rightHalfSz = len(points) - leftHalfSz
+        
         for j in range(rightHalfSz):
             pointsB.append(points[j + (rightHalfSz - 1)])
         
