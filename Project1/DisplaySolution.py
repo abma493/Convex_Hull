@@ -33,6 +33,10 @@ for i in range(len(x)):
 	p = Point(float(x[i]), float(y[i]))
 	points.append(p)
 
+
+# convexHull solution here
+
+
 #Adding the input points to the plot so we can visualize what the points look like.
 #The scatter() function will draw just the points.
 plt.scatter(x,y)

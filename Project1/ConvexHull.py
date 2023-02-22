@@ -3,30 +3,32 @@ from Point import Point
 from Line import Line
 
 class ConvexHull:
+
+
     def __init__(self, filename, points):
         self.results = filename
-        self.points = points
+        self.points = points 
         self.input = open(filename, 'w')
 
-    def convexHull(self, points):
+    def convexHull(self):
         
-        if len(points) == 2:
-            return Point.__init__(points[0], points[1])
-        elif len(points) == 3:
+        if len(self.points) == 2:
+            return Point.__init__(self.points[0], self.points[1])
+        elif len(self.points) == 3:
             print("Base case size 3")
 
         pointsA = []
         pointsB = []
 
-        leftHalfSz = len(points) / 2
+        leftHalfSz = len(self.points) / 2
 
         for i in range(leftHalfSz):
-            pointsA.append(points[i])
+            pointsA.append(self.points[i])
         
-        rightHalfSz = len(points) - leftHalfSz
+        rightHalfSz = len(self.points) - leftHalfSz
         
         for j in range(rightHalfSz):
-            pointsB.append(points[j + (rightHalfSz - 1)])
+            pointsB.append(self.points[j + (rightHalfSz - 1)])
         
 
         # Recursive divide the subarrays
