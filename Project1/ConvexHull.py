@@ -14,10 +14,11 @@ class ConvexHull:
             return Point.__init__(points[0], points[1])
         elif len(points) == 3:
             print("Base case size 3")
-
+        #2 convex hulls
         pointsA = []
         pointsB = []
 
+        #Divide points into 2 halves
         leftHalfSz = len(points) / 2
         for i in range(leftHalfSz):
             pointsA.append(points[i])
@@ -33,7 +34,7 @@ class ConvexHull:
 
         self.computeHull()
 
-
+    #Merge halves, obtaining convexhulls.
     def computeHull():
         print()
 
