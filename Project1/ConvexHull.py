@@ -34,15 +34,49 @@ class ConvexHull:
         print(f'subConvexB')
         for i in range(len(sub_convexB)):
             print(sub_convexB[i])
-        
-        return []; 
-        #self.computeHull(self, sub_convexA, sub_convexB)
+         
+        self.computeHull(sub_convexA, sub_convexB, pointsA[len(pointsA) - 1], pointsB[0])
 
 
     # o(n)
-    def computeHull(self, arrayA, arrayB):
-        print(arrayA, arrayB)
+    def computeHull(self, arrayA: list, arrayB: list, rightMostPoint: Point, leftMostPoint: Point):
+        upperTangent = self.findUpperTangent(leftMostPoint, rightMostPoint, arrayA, arrayB)
+        assert isinstance(upperTangent, Line)
 
-    def pointIsAboveLine(self, line: Line, point: Point):
+    def findUpperTangent(self, point_L: Point, point_R: Point, arrayA: list, arrayB: list) -> Line:
+        myLine = Line(point_L, point_R)
+        isTangentA = bool(False)
+        isTangentB = bool(False)
+
+        while(isTangentA is False and isTangentB is False):
+            
+            while(isTangentA is False):
+                i_chk = arrayA.index(Line.getPoint2(myLine)) - 1
+                if i_chk < 0:
+                    isTangentA = bool(True)
+                else:
+                    if self.pointIsAboveLine(myLine, arrayA.__getitem__(i_chk)) is not True:
+                        isTangentA = True
+                    Line.setPoint2(myLine, arrayA.__getitem__(i_chk))
+                
+
+            print(f'upper tangent right: {Line.getPoint2(myLine)} {isTangentA}')
+
+            while(isTangentB is False):
+                i_chk = arrayB.index(Line.getPoint1(myLine)) + 1
+                if i_chk >= len(arrayB):
+                    isTangentB = bool(True)
+                else:
+                    print(myLine)
+                    print(arrayB.__getitem__(i_chk))
+                    if self.pointIsAboveLine(myLine, arrayB.__getitem__(i_chk)) is not True:
+                        isTangentB = True
+                    Line.setPoint2(myLine, arrayB.__getitem__(i_chk))
+            
+            print(f'upper tangent left: {Line.getPoint2(myLine)} {isTangentB}')
+        return myLine
+
+
+    def pointIsAboveLine(self, line: Line, point: Point) -> bool:
         yLine = float(Line.getSlope(line) * Point.getX(point) + Line.getY_Intercept(line))
         return bool(Point.getY(point) > yLine)
