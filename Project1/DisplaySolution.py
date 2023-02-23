@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import os
 from Point import Point
+from ConvexHull import ConvexHull
 
 #Input file path
-inputFile = 'Project1/input.csv'
+inputFile = 'small_input.csv'
 #Open input .csv file
 if not os.path.exists(inputFile):
 	print('Cannot find '+ inputFile + '.')
@@ -33,8 +34,9 @@ for i in range(len(x)):
 	p = Point(float(x[i]), float(y[i]))
 	points.append(p)
 
-
 # convexHull solution here
+convexHull = ConvexHull("output.txt")
+ConvexHull.convexHull(convexHull, points)
 
 
 #Adding the input points to the plot so we can visualize what the points look like.

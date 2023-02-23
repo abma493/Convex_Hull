@@ -5,43 +5,45 @@ from Line import Line
 class ConvexHull:
 
 
-    def __init__(self, filename, points):
-        self.results = filename
-        self.points = points 
+    def __init__(self, filename):
+        self.convexPoints = []
+        self.results = filename 
         self.input = open(filename, 'w')
 
-    def convexHull(self):
-        
-        if len(self.points) == 2:
-            return Point.__init__(self.points[0], self.points[1])
-        elif len(self.points) == 3:
-            print("Base case size 3")
+    def convexHull(self, points) -> list:
 
-        pointsA = []
-        pointsB = []
+        if len(points) == 2:
+            return [points[0], points[1]]
+        elif len(points) == 3:
+            if self.pointIsAboveLine(Line(points[0],points[2]), 
+                                     points[1]):
+                return [points[0], points[1], points[2]]
 
-        leftHalfSz = len(self.points) / 2
 
-        for i in range(leftHalfSz):
-            pointsA.append(self.points[i])
-        
-        rightHalfSz = len(self.points) - leftHalfSz
-        
-        for j in range(rightHalfSz):
-            pointsB.append(self.points[j + (rightHalfSz - 1)])
-        
+        hlf_sz = int(len(points) / 2)
+        pointsA = points[hlf_sz:]
+        pointsB = points[:hlf_sz]
 
         # Recursive divide the subarrays
-        self.convexHull(pointsA)
-        self.convexHull(pointsB)
+        sub_convexA = self.convexHull(pointsA)
+        sub_convexB = self.convexHull(pointsB)
 
-        #self.computeHull()
+        print(f'current arr len: {len(points)}')
+
+        for i in range(len(sub_convexA)):
+            print(sub_convexA[i])
+        
+        for i in range(len(sub_convexB)):
+            print(sub_convexB[i])
+        
+        return []; 
+        #self.computeHull(self, sub_convexA, sub_convexB)
 
 
     # o(n)
     def computeHull(self, arrayA, arrayB):
         print(arrayA, arrayB)
 
-    def pointIsAboveLine(line, point):
+    def pointIsAboveLine(self, line: Line, point: Point):
         yLine = float(Line.getSlope(line) * Point.getX(point) + Line.getY_Intercept(line))
         return bool(Point.getY(point) > yLine)

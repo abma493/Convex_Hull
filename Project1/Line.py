@@ -18,7 +18,7 @@ class Line:
     # upon invocation by constructor
     # Param(s): Point x, Point y of this class
     def createLine(self, p1, p2):
-        self.slope = self.computeSlope(self, p1, p2)
+        self.slope = self.computeSlope(p1, p2)
         self.y_intercept = Point.getY(p1) - (self.slope * Point.getX(p1))
 
     def computeSlope(self, p1, p2):
