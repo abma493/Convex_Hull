@@ -23,7 +23,7 @@ class ConvexHull:
         hlf_sz = int(len(points) / 2)
         pointsA = points[hlf_sz:]
         pointsB = points[:hlf_sz]
-
+        #test mme
         # Recursive divide the subarrays
         sub_convexA = self.convexHull(pointsA)
         sub_convexB = self.convexHull(pointsB)
