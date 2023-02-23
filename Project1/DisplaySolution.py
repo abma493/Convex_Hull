@@ -4,7 +4,7 @@ from Point import Point
 from ConvexHull import ConvexHull
 
 #Input file path
-inputFile = 'small_input.csv'
+inputFile = 'Project1\small_input.csv'
 #Open input .csv file
 if not os.path.exists(inputFile):
 	print('Cannot find '+ inputFile + '.')

@@ -28,8 +28,7 @@ class ConvexHull:
         sub_convexA = self.convexHull(pointsA)
         sub_convexB = self.convexHull(pointsB)
 
-        print(f'current arr len: {len(points)}')
-
+        
         for i in range(len(sub_convexA)):
             print(sub_convexA[i])
         
