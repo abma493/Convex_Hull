@@ -3,7 +3,7 @@ import os
 from Point import Point
 
 #Input file path
-inputFile = 'Project1/input.csv'
+inputFile = 'Project1/small_input.csv'
 #Open input .csv file
 if not os.path.exists(inputFile):
 	print('Cannot find '+ inputFile + '.')

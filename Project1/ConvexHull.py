@@ -16,22 +16,18 @@ class ConvexHull:
             return Point.__init__(self.points[0], self.points[1])
         elif len(self.points) == 3:
             print("Base case size 3")
+            
         #2 convex hulls
         pointsA = []
         pointsB = []
 
-<<<<<<< HEAD
         #Divide points into 2 halves
-        leftHalfSz = len(points) / 2
-=======
         leftHalfSz = len(self.points) / 2
-
->>>>>>> refs/remotes/origin/master
+        leftHalfSz = len(self.points) / 2
         for i in range(leftHalfSz):
             pointsA.append(self.points[i])
         
         rightHalfSz = len(self.points) - leftHalfSz
-        
         for j in range(rightHalfSz):
             pointsB.append(self.points[j + (rightHalfSz - 1)])
         
@@ -42,16 +38,13 @@ class ConvexHull:
 
         #self.computeHull()
 
-<<<<<<< HEAD
     #Merge halves, obtaining convexhulls.
     def computeHull():
         print()
-=======
 
     # o(n)
     def computeHull(self, arrayA, arrayB):
         print(arrayA, arrayB)
->>>>>>> refs/remotes/origin/master
 
     def pointIsAboveLine(line, point):
         yLine = float(Line.getSlope(line) * Point.getX(point) + Line.getY_Intercept(line))
