@@ -44,12 +44,12 @@ class ConvexHull:
     def computeHull(self, arrayA, arrayB):
         print(arrayA, arrayB)
         #Testing lowerTangent()
-        if len(arrayA)==0:
-            return
+        # if len(arrayA)==0:
+        #     return
 
-        print('Testing lowerTangent():')
-        lowerTan = self.lowerTangent(arrayA, arrayB)
-        print('P: ', lowerTan.p1, ' Q: ', lowerTan.p2, ' eq: ', lowerTan)
+        # print('Testing lowerTangent():')
+        # lowerTan = self.lowerTangent(arrayA, arrayB)
+        # print('P: ', lowerTan.p1, ' Q: ', lowerTan.p2, ' eq: ', lowerTan)
 
     def pointIsAboveLine(self, line: Line, point: Point):
         yLine = float(Line.getSlope(line) * Point.getX(point) + Line.getY_Intercept(line))
