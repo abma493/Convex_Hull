@@ -8,7 +8,18 @@ class ConvexHull:
     def __init__(self, filename):
         self.convexPoints = []
         self.results = filename 
-        self.input = open(filename, 'w')
+
+    def writeToFile(self, convexList, sortedX: list):
+        input = open(self.results, 'w')
+        for convexPoint in convexList:
+            index = sortedX.index(Point.getX(convexPoint))
+            input.write(f'{str(index)}\n')
+        input.close()
+            
+
+
+
+
 
     def convexHull(self, points) -> list:
 
@@ -18,65 +29,174 @@ class ConvexHull:
             if self.pointIsAboveLine(Line(points[0],points[2]), 
                                      points[1]):
                 return [points[0], points[1], points[2]]
+            else:
+                return [points[0], points[2], points[1]]
 
 
         hlf_sz = int(len(points) / 2)
         pointsA = points[:hlf_sz]
         pointsB = points[hlf_sz:]
         # Recursive divide the subarrays
-        sub_convexA = self.convexHull(pointsA)
-        sub_convexB = self.convexHull(pointsB)
+        convexA = self.convexHull(pointsA)
+        convexB = self.convexHull(pointsB)
 
-        print(f'subConvexA')
-        for i in range(len(sub_convexA)):
-            print(sub_convexA[i])
+        print("-----------------")
+        if convexA is not None:
+            print(f'subConvexA')
+            for i in range(len(convexA)):
+                print(f'{convexA[i]} vs original {pointsA[i]}')
+        if convexB is not None: 
+            print(f'subConvexB')
+            for i in range(len(convexB)):
+                print(f'{convexB[i]} vs original {pointsB[i]}')
+        print()
+
+        mergeList: list = self.computeHull(convexA, convexB) # merge subconvex of A and B !!!
         
-        print(f'subConvexB')
-        for i in range(len(sub_convexB)):
-            print(sub_convexB[i])
-         
-        self.computeHull(sub_convexA, sub_convexB, pointsA[len(pointsA) - 1], pointsB[0])
+        print("Displaying merged Convex Hull")
+        for i in mergeList:
+            print(i)
+        
+        return mergeList
 
 
     # o(n)
-    def computeHull(self, arrayA: list, arrayB: list, rightMostPoint: Point, leftMostPoint: Point):
-        upperTangent = self.findUpperTangent(leftMostPoint, rightMostPoint, arrayA, arrayB)
-        assert isinstance(upperTangent, Line)
+    def computeHull(self, pointsA: list, pointsB: list) -> list:
+        upperTan = self.upperTangent(pointsA, pointsB)
+        print(upperTan)
+        print("upperTan DONE.\n")
+        lowerTan = self.lowerTangent(pointsA, pointsB)
+        print(lowerTan)
+        print("lowerTan DONE.\n")
 
-    def findUpperTangent(self, point_L: Point, point_R: Point, arrayA: list, arrayB: list) -> Line:
-        myLine = Line(point_L, point_R)
-        isTangentA = bool(False)
-        isTangentB = bool(False)
+        self.convexPoints = [] # reset the list until the last time this function gets called.
 
-        while(isTangentA is False and isTangentB is False):
+        if Point.getX(pointsA[0]) != Point.getX(Line.getPoint1(upperTan)):
+            self.convexPoints.append(pointsA[0]) # start at first clockwise point of sub-convex A
+            i = 1 # counter for A
+            x = Point.getX(pointsA[i])
+            # get to the x-coordinate of the upperTan and add any hull points in between, if any
+            while x != Point.getX(Line.getPoint1(upperTan)) and i + 1 in range(len(pointsA)):
+                self.convexPoints.append(pointsA[i])
+                i += 1
+                x = Point.getX(pointsA[i])
+               
+        self.convexPoints.append(Line.getPoint1(upperTan)) # now connect the upper tan p1 to hull ordered list
+        upperTanP2 = Line.getPoint2(upperTan)
+        self.convexPoints.append(upperTanP2) # add the connecting upper tan p2 to the convex hull ordered list
+
+        i = pointsB.index(upperTanP2) + 1 # one point in the sub ordered list of B that is connected right after upper tan p2 
+        while i in range(len(pointsB)) and Point.getX(pointsB[i]) != Point.getX(Line.getPoint2(lowerTan)):
+            self.convexPoints.append(pointsB[i])   
+            i += 1
+   
+
+        # add the lower tan p2 to the total list
+        self.convexPoints.append(Line.getPoint2(lowerTan))
+        
+        if not self.convexPoints.__contains__(Line.getPoint1(lowerTan)):
+            self.convexPoints.append(Line.getPoint1(lowerTan))
+
+        k = pointsA.index(Line.getPoint1(lowerTan)) + 1 # one ahead of the lower tan p1 point in the sub ordered hull list of A
+        while k in range(len(pointsA)) and not self.convexPoints.__contains__(pointsA[k]):
+            self.convexPoints.append(pointsA[k])
+            k += 1
+        
+        return self.convexPoints
+
+
+    def upperTangent(self, pointsA: list, pointsB: list) -> Line:
+
+        # Point P is the rightmost point of A
+        pointP = self.findRightmost(pointsA)
+        # Point Q is the leftmost point of B
+        pointQ = self.findLeftMost(pointsB)
+
+        # initial line (to be tested against other points)
+        linePQ = Line(pointP, pointQ)
+
+        indexP_ngbor = pointsA.index(pointP) - 1
+        P_Neighbor = pointsA[indexP_ngbor]
+        while self.pointIsAboveLine(linePQ, P_Neighbor) is True:
             
-            while(isTangentA is False):
-                i_chk = arrayA.index(Line.getPoint2(myLine)) - 1
-                if i_chk < 0:
-                    isTangentA = bool(True)
-                else:
-                    if self.pointIsAboveLine(myLine, arrayA.__getitem__(i_chk)) is not True:
-                        isTangentA = True
-                    Line.setPoint2(myLine, arrayA.__getitem__(i_chk))
-                
-
-            print(f'upper tangent right: {Line.getPoint2(myLine)} {isTangentA}')
-
-            while(isTangentB is False):
-                i_chk = arrayB.index(Line.getPoint1(myLine)) + 1
-                if i_chk >= len(arrayB):
-                    isTangentB = bool(True)
-                else:
-                    print(myLine)
-                    print(arrayB.__getitem__(i_chk))
-                    if self.pointIsAboveLine(myLine, arrayB.__getitem__(i_chk)) is not True:
-                        isTangentB = True
-                    Line.setPoint2(myLine, arrayB.__getitem__(i_chk))
+            pointP = P_Neighbor
+            Line.setPoint1(linePQ, pointP) # update the line
             
-            print(f'upper tangent left: {Line.getPoint2(myLine)} {isTangentB}')
-        return myLine
+            if indexP_ngbor - 1 in range(len(pointsA)):
+                indexP_ngbor -= 1 # counter-clockwise
+            else: 
+                break
+            P_Neighbor = pointsA[indexP_ngbor]
+
+        indexQ_ngbor = pointsB.index(pointQ) + 1
+        Q_Neighbor = pointsB[indexQ_ngbor]
+        while self.pointIsAboveLine(linePQ, Q_Neighbor) is True:
+            pointQ = Q_Neighbor
+            Line.setPoint2(linePQ, pointQ) # update the line
+
+            if indexQ_ngbor + 1 in range(len(pointsB)):
+                indexQ_ngbor += 1 # clockwise
+            else:
+                break
+            Q_Neighbor = pointsB[indexQ_ngbor]
+            if Point.getX(Q_Neighbor) == 2.0:
+                print(Q_Neighbor)
+        
+        return linePQ
+
+    def lowerTangent(self, pointsA: list, pointsB: list) -> Line:
+
+        # Point P is the rightmost point of A
+        pointP = self.findRightmost(pointsA)
+        # Point Q is the leftmost point of B
+        pointQ = self.findLeftMost(pointsB)
+
+        # initial line (to be tested against other points)
+        linePQ = Line(pointP, pointQ)
+
+        indexP_ngbor = pointsA.index(pointP) - 1
+        P_Neighbor = pointsA[indexP_ngbor]
+        while self.pointIsAboveLine(linePQ, P_Neighbor) is False:
+            pointP = P_Neighbor
+            Line.setPoint1(linePQ, pointP)
+            if indexP_ngbor - 1 in range(len(pointsA)):
+                indexP_ngbor -= 1
+            else:
+                break
+            P_Neighbor = pointsA[indexP_ngbor]
+        
+        indexQ_ngbor = pointsB.index(pointQ) + 1
+        Q_Neighbor = pointsB[indexQ_ngbor]
+        while self.pointIsAboveLine(linePQ, Q_Neighbor) is False:
+            pointQ = Q_Neighbor
+            Line.setPoint2(linePQ, pointQ)
+            
+            if indexQ_ngbor + 1 in range(len(pointsB)):
+                indexQ_ngbor += 1
+            else:
+                break
+            Q_Neighbor = pointsB[indexQ_ngbor]
+
+        return linePQ
+
 
 
     def pointIsAboveLine(self, line: Line, point: Point) -> bool:
         yLine = float(Line.getSlope(line) * Point.getX(point) + Line.getY_Intercept(line))
         return bool(Point.getY(point) > yLine)
+    
+
+    def findLeftMost(self, pointsList: list) -> Point:
+        leftMost = pointsList[0]
+        for i in pointsList:
+            if Point.getX(i) < Point.getX(leftMost):
+                leftMost = i
+        return leftMost
+
+        
+    def findRightmost(self, pointsList: list) -> Point:
+        rightMost: Point = pointsList[len(pointsList) - 1]
+        for i in pointsList:
+            if Point.getX(i) > Point.getX(rightMost):
+                rightMost = i
+        return rightMost

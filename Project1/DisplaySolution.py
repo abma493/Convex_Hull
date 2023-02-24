@@ -4,7 +4,7 @@ from Point import Point
 from ConvexHull import ConvexHull
 
 #Input file path
-inputFile = 'Project1\small_input.csv'
+inputFile: str = 'input.csv'
 #Open input .csv file
 if not os.path.exists(inputFile):
 	print('Cannot find '+ inputFile + '.')
@@ -12,15 +12,15 @@ if not os.path.exists(inputFile):
 
 input = open(inputFile,'r')
 
-x = []
-y = []
+x: list = []
+y: list = []
 
 #Read each line of the input file.
 #Storing the x-coordinates into x.
 #Storing the y-coordinates into y.
-line = input.readline()
+line: str = input.readline()
 while line:
-	coordinates = line.split(',')
+	coordinates: list = line.split(',')
 	x.append(float(coordinates[0]))
 	y.append(float(coordinates[1]))
 	line = input.readline()
@@ -36,7 +36,12 @@ for i in range(len(x)):
 
 # convexHull solution here
 convexHull = ConvexHull("output.txt")
-ConvexHull.convexHull(convexHull, points)
+convexPoints = ConvexHull.convexHull(convexHull, points)
+ConvexHull.writeToFile(convexHull, convexPoints, x)
+
+
+# ConvexHull.writeToFile(convexPoints, x)
+
 
 
 #Adding the input points to the plot so we can visualize what the points look like.
