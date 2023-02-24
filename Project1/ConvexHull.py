@@ -74,12 +74,10 @@ class ConvexHull:
         if Point.getX(pointsA[0]) != Point.getX(Line.getPoint1(upperTan)):
             self.convexPoints.append(pointsA[0]) # start at first clockwise point of sub-convex A
             i = 1 # counter for A
-            x = Point.getX(pointsA[i])
             # get to the x-coordinate of the upperTan and add any hull points in between, if any
-            while x != Point.getX(Line.getPoint1(upperTan)) and i + 1 in range(len(pointsA)):
+            while i in range(len(pointsA)) and Point.getX(pointsA[i]) != Point.getX(Line.getPoint1(upperTan)):
                 self.convexPoints.append(pointsA[i])
                 i += 1
-                x = Point.getX(pointsA[i])
                
         self.convexPoints.append(Line.getPoint1(upperTan)) # now connect the upper tan p1 to hull ordered list
         upperTanP2 = Line.getPoint2(upperTan)
