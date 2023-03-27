@@ -12,7 +12,13 @@ class Line:
 
     # toString function
     def __str__(self):
-        return f"Line data:\nx1: {Point.getX(self.p1)} y1: {Point.getY(self.p1)}\n x2: {Point.getX(self.p2)} y2: {Point.getY(self.p2)}\n slope: {self.slope} | y-intercept: {self.y_intercept}"
+        return """Line data:\nx1: {Xp1} y1: {Yp1}\n x2: {Xp2} y2: {Yp2}\n slope: {slope} | 
+        y-intercept: {yInt}""".format(Xp1=Point.getX(self.p1)
+                                    ,Yp1=Point.getY(self.p1) 
+                                    ,Xp2=Point.getX(self.p2) 
+                                    ,Yp2=Point.getY(self.p2)
+                                    ,slope=self.slope
+                                    ,yInt=self.y_intercept)
 
     # not a static method, thus, self is a param to indicate this instance
     # upon invocation by constructor

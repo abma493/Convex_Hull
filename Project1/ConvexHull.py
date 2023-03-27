@@ -9,11 +9,11 @@ class ConvexHull:
         self.convexPoints = []
         self.results = filename 
 
-    def writeToFile(self, convexList, sortedX: list):
+    def writeToFile(self, convexList, sortedX):
         input = open(self.results, 'w')
         for convexPoint in convexList:
             index = sortedX.index(Point.getX(convexPoint))
-            input.write(f'{str(index)}\n')
+            input.write('{index}\n'.format(index=str(index)))
         input.close()
             
 
@@ -21,7 +21,7 @@ class ConvexHull:
 
 
 
-    def convexHull(self, points) -> list:
+    def convexHull(self, points):
 
         if len(points) == 2:
             return [points[0], points[1]]
@@ -42,16 +42,16 @@ class ConvexHull:
 
         print("-----------------")
         if convexA is not None:
-            print(f'subConvexA')
+            print('subConvexA')
             for i in range(len(convexA)):
-                print(f'{convexA[i]} vs original {pointsA[i]}')
+                print('{convexA} vs original {pointsA}'.format(convexA=convexA[i],pointsA=pointsA[i]))
         if convexB is not None: 
-            print(f'subConvexB')
+            print('subConvexB')
             for i in range(len(convexB)):
-                print(f'{convexB[i]} vs original {pointsB[i]}')
+                print('{convexB} vs original {pointsB}'.format(convexB=convexB[i],pointsB=pointsB[i]))
         print()
 
-        mergeList: list = self.computeHull(convexA, convexB) # merge subconvex of A and B !!!
+        mergeList = self.computeHull(convexA, convexB) # merge subconvex of A and B !!!
         
         print("Displaying merged Convex Hull")
         for i in mergeList:
@@ -61,7 +61,7 @@ class ConvexHull:
 
 
     # o(n)
-    def computeHull(self, pointsA: list, pointsB: list) -> list:
+    def computeHull(self, pointsA, pointsB):
         upperTan = self.upperTangent(pointsA, pointsB)
         print(upperTan)
         print("upperTan DONE.\n")
@@ -103,7 +103,7 @@ class ConvexHull:
         return self.convexPoints
 
 
-    def upperTangent(self, pointsA: list, pointsB: list) -> Line:
+    def upperTangent(self, pointsA, pointsB):
 
         # Point P is the rightmost point of A
         pointP = self.findRightmost(pointsA)
@@ -142,7 +142,7 @@ class ConvexHull:
         
         return linePQ
 
-    def lowerTangent(self, pointsA: list, pointsB: list) -> Line:
+    def lowerTangent(self, pointsA, pointsB):
 
         # Point P is the rightmost point of A
         pointP = self.findRightmost(pointsA)
@@ -179,12 +179,12 @@ class ConvexHull:
 
 
 
-    def pointIsAboveLine(self, line: Line, point: Point) -> bool:
+    def pointIsAboveLine(self, line, point):
         yLine = float(Line.getSlope(line) * Point.getX(point) + Line.getY_Intercept(line))
         return bool(Point.getY(point) > yLine)
     
 
-    def findLeftMost(self, pointsList: list) -> Point:
+    def findLeftMost(self, pointsList):
         leftMost = pointsList[0]
         for i in pointsList:
             if Point.getX(i) < Point.getX(leftMost):
@@ -192,8 +192,8 @@ class ConvexHull:
         return leftMost
 
         
-    def findRightmost(self, pointsList: list) -> Point:
-        rightMost: Point = pointsList[len(pointsList) - 1]
+    def findRightmost(self, pointsList):
+        rightMost = pointsList[len(pointsList) - 1]
         for i in pointsList:
             if Point.getX(i) > Point.getX(rightMost):
                 rightMost = i

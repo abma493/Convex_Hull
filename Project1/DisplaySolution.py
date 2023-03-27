@@ -4,7 +4,7 @@ from Point import Point
 from ConvexHull import ConvexHull
 
 #Input file path
-inputFile: str = 'input.csv'
+inputFile = 'input.csv'
 #Open input .csv file
 if not os.path.exists(inputFile):
 	print('Cannot find '+ inputFile + '.')
@@ -12,15 +12,15 @@ if not os.path.exists(inputFile):
 
 input = open(inputFile,'r')
 
-x: list = []
-y: list = []
+x = []
+y = []
 
 #Read each line of the input file.
 #Storing the x-coordinates into x.
 #Storing the y-coordinates into y.
-line: str = input.readline()
+line = input.readline()
 while line:
-	coordinates: list = line.split(',')
+	coordinates = line.split(',')
 	x.append(float(coordinates[0]))
 	y.append(float(coordinates[1]))
 	line = input.readline()
